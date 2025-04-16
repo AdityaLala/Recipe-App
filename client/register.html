@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Register | Flavor Fusion App</title>
+  <link rel="stylesheet" href="styles/main.css" />
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background: #151a32;
+      color: #fff;
+      padding: 0;
+      margin: 0;
+    }
+
+    .register-container {
+      max-width: 400px;
+      margin: 50px auto;
+      padding: 20px;
+      background-color: rgba(0, 0, 0, 0.7);
+      border-radius: 8px;
+    }
+
+    h2 {
+      text-align: center;
+      font-size: 2rem;
+      color: #fff;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    label {
+      font-size: 1rem;
+      color: #fff;
+    }
+
+    input {
+      padding: 10px;
+      font-size: 1rem;
+      border: 1px solid #e67e22;
+      border-radius: 5px;
+      background-color: transparent;
+      color: #fff;
+    }
+
+    button {
+      padding: 12px;
+      font-size: 1.1rem;
+      background-color: #e67e22;
+      border: none;
+      color: #fff;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #f39c12;
+    }
+
+    .login-link {
+      text-align: center;
+      margin-top: 15px;
+      color: #fff;
+    }
+
+    .login-link a {
+      color: #f39c12;
+      text-decoration: none;
+    }
+
+    .login-link a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="register-container">
+    <h2>Create an Account</h2>
+    <form id="register-form">
+      <label for="name">Name</label>
+      <input type="text" id="name" required placeholder="Enter your full name" />
+
+      <label for="email">Email</label>
+      <input type="email" id="email" required placeholder="Enter your email" />
+
+      <label for="password">Password</label>
+      <input type="password" id="password" required placeholder="Enter your password" />
+
+      <button type="submit">Register</button>
+    </form>
+
+    <p class="login-link">
+      Already have an account? <a href="#" id="login-link">Login here</a>
+    </p>
+  </div>
+
+  <script>
+    // Register form submission
+    const registerForm = document.getElementById("register-form");
+const API_BASE = "http://localhost:5000";
+
+
+    registerForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const name = document.getElementById("name").value;
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      try {
+        const response = await fetch(`${API_BASE}/api/users/register`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ name, email, password }),
+        });
+
+        const data = await response.json();
+        if (response.ok) {
+          alert("Registration successful! Please login.");
+          window.location.href = "index.html"; // Redirect to home page (index.html)
+        } else {
+          alert(data.error || "Registration failed. Try again.");
+        }
+      } catch (err) {
+        console.error(err);
+        alert("An error occurred. Please try again.");
+      }
+    });
+
+    // Redirect to login page
+    document.getElementById("login-link").addEventListener("click", () => {
+      window.location.href = "index.html"; 
+    });
+  </script>
+</body>
+</html>

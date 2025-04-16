@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Flavour Fusion App</title>
+  <link rel="stylesheet" href="styles/main.css" />
+  <style>
+    /* LOGIN MODAL STYLES */
+    #login-modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(0, 0, 0, 0.6);
+    }
+
+    .modal-content {
+      background-color: #151a32;
+      margin: 10% auto;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 400px;
+      position: relative;
+    }
+
+    #login-modal h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    #login-modal input {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: 1px solid #121010;
+      border-radius: 6px;
+    }
+    
+    #login-modal button {
+      width: 100%;
+      padding: 12px;
+      background-color: #ff7f50;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    #login-modal .close {
+      position: absolute;
+      top: 8px;
+      right: 15px;
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    #login-modal button:hover {
+      background-color: #ff6333;
+    }
+  </style>
+</head>
+<body>
+  <header class="main-header">
+    <div class="logo">🍽️ Flavor Fusion</div>
+    <!-- Navbar changes: Show User Info if logged in -->
+<nav class="navbar">
+  <a href="#">Home</a>
+  <a href="#categories">Categories</a>
+  <a href="#about">About Us</a>
+  <button type="button" id="login-button">Login</button>
+  <button id="logout-button" style="display: none;">Logout</button>
+
+  <a href="register.html" id="register-link">Register</a>
+  <div class="navbar-search">
+    <input type="text" id="search-input" placeholder="Search recipes..." />
+    <button id="search-button">🔍</button>
+  </div>
+
+  <!-- Display user name after login -->
+  <div id="user-name-display"></div> <!-- Will display the logged-in user's name -->
+</nav>
+
+</header>
+
+
+<section class="hero">
+  <div class="hero-content">
+    <h1>Welcome to Flavor Fusion</h1>
+    <p>Discover, Share & Cook your favorite recipes.</p>
+    <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+      <a href="#categories" class="btn">Explore Recipes</a>
+      <a href="#" id="add-recipe-btn" class="btn" style="display: none;">Add Recipe</a>
+    </div>
+    
+  </div>
+</section>
+
+  <section class="categories" id="categories">
+    <h2>Categories</h2>
+    <div class="category-grid">
+        <div class="category-box" data-category="Veg">🥦 Veg Recipes</div>
+        <div class="category-box" data-category="Non-Veg">🍗 Non-Veg Recipes</div>
+        <div class="category-box" data-category="Dessert">🍨 Dessert</div>
+    </div>
+  </section>
+
+  <!-- Recipe Grid Section -->
+  <section class="recipes-container" id="recipe-grid" style="display: none;">
+    <h2 id="category-title">Recipes</h2>
+    <div class="recipe-grid" id="recipe-boxes"></div>
+  </section>
+  
+  <section id="recipe-details" style="display: none">
+    <div class="recipe-details-container">
+      <div class="recipe-main" id="recipe-main"></div>
+      <div class="recommended-recipes" id="recommended-recipes">
+        <h3>Recommended Recipes</h3>
+        <div id="recommended-list"></div>
+      </div>
+    </div>
+  </section>
+<!-- Login Modal -->
+<div id="login-modal" class="modal">
+  <div class="modal-content">
+    <span class="close" id="close-login">&times;</span>
+    <h2 style="text-align: center; color: #e67e22;">Login to Flavor Fusion 🍽️</h2>
+    
+    <form id="login-form" style="display: flex; flex-direction: column; gap: 15px; padding: 20px;">
+      <label for="email">Email:</label>
+      <input type="email" id="login-email" placeholder="Email" required />
+      <label for="password">Password:</label>
+      <input type="password" id="login-password" placeholder="Password" required />
+
+      <button type="submit" style="padding: 10px; background-color: #e67e22; color: white; border: none; cursor: pointer;">Login</button>
+
+      <p style="text-align: center; margin-top: 10px;">
+        Don't have an account? <a href="register.html" id="register-link" style="color: #e67e22;">Register here</a>
+      </p>
+    </form>
+  </div>
+</div>
+
+<!-- Add Recipe Modal -->
+<div id="add-recipe-modal" class="modal">
+  <div class="modal-content" style="max-width: 600px; border-radius: 10px;">
+    <span class="close" id="close-add-recipe">&times;</span>
+    <h2 style="text-align: center; color: #e67e22; margin-bottom: 20px;">🍲 Share Your Recipe</h2>
+    <form id="add-recipe-form" style="display: flex; flex-direction: column; gap: 15px;">
+      <input type="text" id="recipe-title" placeholder="Recipe Title" required />
+      <input type="text" id="recipe-category" placeholder="Category (Veg, Non-Veg, Dessert)" required />
+      <textarea id="recipe-ingredients" placeholder="Ingredients (comma separated)" required></textarea>
+      <textarea id="recipe-instructions" placeholder="Instructions" required></textarea>
+      
+      <!-- Image Upload -->
+      <div style="display: flex; flex-direction: column;">
+        <label for="recipe-image-file" style="margin-bottom: 5px;">Upload Image</label>
+        <input type="file" name="image" id="recipe-image-file" accept="image/*" />
+        <small style="color: gray;">Image will be uploaded and converted automatically.</small>
+      </div>
+
+      <button type="submit" style="padding: 10px; background-color: #e67e22; color: white; border: none; cursor: pointer;">
+        Submit Recipe
+      </button>
+    </form>
+  </div>
+</div>
+
+
+
+  <footer class="footer">
+    <p>© 2025 Flavor Fusion. Made with ❤️ for foodies.</p>
+  </footer>
+
+  <script src="scripts/main.js"></script>
+  <script src="scripts/login.js"></script>
+</body>
+</html>
