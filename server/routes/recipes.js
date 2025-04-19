@@ -43,60 +43,7 @@ router.post('/', auth, upload.single('image'), async (req, res) => {
 
 
 
-// POST: Create new recipe
-// router.post('/add', auth, async (req, res) => {
-//     const { title, ingredients, instructions } = req.body;
-  
-//     const newRecipe = new Recipe({
-//       title,
-//       ingredients,
-//       instructions,
-//       creator: req.user.id, // 🧠 from JWT
-//     });
-  
-//     await newRecipe.save();
-//     res.status(201).json(newRecipe);
-//   });
-  // router.post('/', auth, async (req, res) => {
-  //   const { title, ingredients, instructions, category } = req.body;
-  //   try {
-  //     const newRecipe = new Recipe({
-  //       title,
-  //       ingredients,
-  //       instructions,
-  //       category,
-  //       creator: req.user.id,
-  //     });
-  //     await newRecipe.save();
-  //     res.status(201).json(newRecipe);
-  //   } catch (err) {
-  //     res.status(500).json({ error: err.message });
-  //   }
-  // });
-  
-  //search
-  // GET /api/recipes/search?title=paneer
-  // router.get('/search', async (req, res) => {
-  //   try {
-  //     const { title } = req.query;
-  
-  //     if (!title || title.trim() === '') {
-  //       return res.status(400).json({ error: 'Please provide a title to search' });
-  //     }
-  
-  //     const regex = new RegExp(title, 'i'); // 'i' for case-insensitive
-  
-  //     const recipes = await Recipe.find({ title: regex });
-  
-  //     if (recipes.length === 0) {
-  //       return res.status(404).json({ message: 'No recipes found' });
-  //     }
-  
-  //     res.json({ results: recipes });
-  //   } catch (err) {
-  //     res.status(500).json({ error: err.message });
-  //   }
-  // });
+
   // SEARCH API — search by title
 router.get('/search', async (req, res) => {
   try {
@@ -123,14 +70,27 @@ router.get('/search', async (req, res) => {
 //     res.status(500).json({ message: err.message });
 //   }
 // });
-router.get('/', async (req, res) => {
-  try{
-  const recipes = await Recipe.find().select('title category').sort({ createdAt: -1 });
-  res.json(recipes);
-  }catch (err) {
-    res.status(500).json({ message: err.message });
+
+// Get all recipes created by the logged-in user
+router.get("/my-recipes", auth, async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const myRecipes = await Recipe.find({ creator: userId });
+    res.json(myRecipes);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch your recipes" });
   }
 });
+
+//get all recipes
+// router.get('/', async (req, res) => {
+//   try{
+//   const recipes = await Recipe.find().select('title category').sort({ createdAt: -1 });
+//   res.json(recipes);
+//   }catch (err) {
+//     res.status(500).json({ message: err.message });
+//   }
+// });
 
 //recipe preview
 router.get('/preview/:id', async (req, res) => {
@@ -200,25 +160,24 @@ router.get('/:id', auth, async (req, res) => {
 
 
 // Route to update recipe details (with or without image)
-router.patch("/:id", upload.single("image"), async (req, res) => {
+router.patch("/:id", auth, upload.single("image"), async (req, res) => {
   const { id } = req.params;
-  const { title, ingredients, description, category } = req.body;
+  const { title, ingredients, instructions, category } = req.body;
 
   try {
     const updateData = {};
 
-    // Add non-image data to updateData if present
     if (title) updateData.title = title;
-    if (ingredients) updateData.ingredients = ingredients.split(","); // Assuming ingredients are passed as a comma-separated string
-    if (description) updateData.description = description;
+    if (ingredients) updateData.ingredients = ingredients.split(",");
+    if (instructions) updateData.instructions = instructions;
     if (category) updateData.category = category;
 
-    // If an image was uploaded, update imageUrl with the new image path
     if (req.file) {
       updateData.imageUrl = `${req.protocol}://${req.get("host")}/uploads/${req.file.filename}`;
     }
 
-    // Update the recipe in the database
+    console.log("Update Data:", updateData);
+
     const updatedRecipe = await Recipe.findByIdAndUpdate(id, updateData, { new: true });
 
     if (!updatedRecipe) {
@@ -230,6 +189,7 @@ router.patch("/:id", upload.single("image"), async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
 
 
 

@@ -1,14 +1,47 @@
+const logoutBtn = document.getElementById("logout-button");
 const loginBtn = document.getElementById("login-button");
 const loginModal = document.getElementById("login-modal");
 const closeLogin = document.getElementById("close-login");
 const loginForm = document.getElementById("login-form");
 const addRecipeBtn = document.getElementById("add-recipe-btn");
 const closeAddRecipe = document.getElementById("close-add-recipe");
+const registerBtn= document.getElementById("register-link");
+
+
+// In login.js
+function updateUIAfterLogin() {
+  const loginBtn = document.getElementById('login-button');
+  const registerBtn = document.getElementById('register-link');
+  const logoutBtn = document.getElementById('logout-button');
+  const profileDropdown = document.getElementById('profile-avatar');
+
+  loginBtn?.classList.add('hidden');
+  registerBtn?.classList.add('hidden');
+  logoutBtn?.classList.remove('hidden');
+  profileDropdown?.classList.remove('hidden');
+
+  toggleAddRecipeButton(true);
+
+  // Log to confirm UI updates
+  console.log('UI updated after login');
+
+  // Also attach the dropdown functionality here
+  attachProfileAvatarListener();
+  window.location.reload();
+}
+
 
 // Show login modal
 loginBtn.addEventListener("click", (e) => {
   e.preventDefault();
   loginModal.style.display = "block";
+});
+// Logout
+logoutBtn.addEventListener("click", () => {
+  localStorage.removeItem("token");
+  localStorage.removeItem("userName");
+  alert("Logged out successfully!");
+  window.location.href = "index.html";
 });
 
 // Close login modal
@@ -44,15 +77,19 @@ loginForm.addEventListener("submit", async (e) => {
       localStorage.setItem("token", data.token);
       alert("Login successful!");
       loginModal.style.display = "none";
-    
+      
+      
       // loginBtn.disabled = true;
-       loginBtn.style.display = "none"
+      loginBtn.style.display = "none"
       logoutBtn.style.display = "inline-block"; // 👈 show logout button
-    
+      registerBtn.style.display="none"
+      
       const userDisplay = document.getElementById("user-name-display");
       if (userDisplay) userDisplay.textContent = `👋 Hello, ${data.user.name}`;
       const addRecipeBtn = document.getElementById("add-recipe-btn");
       if (addRecipeBtn) addRecipeBtn.style.display = "inline-block";
+      updateUIAfterLogin()
+     
 
     }
     else {
@@ -63,8 +100,6 @@ loginForm.addEventListener("submit", async (e) => {
     alert("Something went wrong with login!");
   }
 });
-
-const logoutBtn = document.getElementById("logout-button");
 
 if (logoutBtn) {
   logoutBtn.addEventListener("click", () => {
@@ -84,6 +119,5 @@ if (logoutBtn) {
     window.location.href = "/client/index.html"; // Optional: redirect to homepage
   });
 }
-
 
 

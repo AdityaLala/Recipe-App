@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>My Dashboard - Flavor Fusion</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #f9f7f7, #dbe2ef);
+      min-height: 100vh;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #3f72af;
+      color: white;
+      padding: 20px 50px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+    header h1 {
+      font-size: 28px;
+    }
+
+    #logout-button {
+      padding: 8px 18px;
+      background: #112d4e;
+      border: none;
+      border-radius: 5px;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    #logout-button:hover {
+      background: #0f2550;
+    }
+
+    main {
+      padding: 30px 50px;
+    }
+
+    #category-title {
+      text-align: center;
+      font-size: 32px;
+      margin-bottom: 30px;
+      color: #112d4e;
+    }
+
+    .recipe-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 30px;
+    }
+
+    .recipe-card {
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .recipe-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    }
+
+    .recipe-card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+    }
+
+    .recipe-card h3 {
+      font-size: 22px;
+      margin: 15px;
+      color: #3f72af;
+    }
+
+    .description {
+      padding: 0 15px 10px 15px;
+      color: #555;
+      font-size: 14px;
+    }
+
+    .card-buttons {
+      display: flex;
+      justify-content: space-around;
+      padding: 15px;
+      border-top: 1px solid #eee;
+    }
+
+    .update-btn, .delete-btn {
+      padding: 8px 14px;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .update-btn {
+      background: #4caf50;
+      color: white;
+    }
+
+    .update-btn:hover {
+      background: #388e3c;
+    }
+
+    .delete-btn {
+      background: #f44336;
+      color: white;
+    }
+
+    .delete-btn:hover {
+      background: #d32f2f;
+    }
+
+    /* Modal for update */
+    .modal {
+      display: none; /* Hidden by default */
+      position: fixed;
+      z-index: 999;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background: rgba(0,0,0,0.5);
+      backdrop-filter: blur(3px);
+    }
+
+    .modal-content {
+      background-color: #fefefe;
+      margin: 80px auto;
+      padding: 30px;
+      border: 1px solid #888;
+      width: 40%;
+      border-radius: 12px;
+    }
+
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .close:hover,
+    .close:focus {
+      color: black;
+    }
+
+    form label {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    form input, form textarea, form select {
+      width: 100%;
+      margin-top: 5px;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+    form button[type="submit"] {
+      margin-top: 20px;
+      background: #3f72af;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    form button[type="submit"]:hover {
+      background: #305680;
+    }
+/* Glow effect for recipe cards */
+.recipe-card:hover {
+  transform: scale(1.03);
+  box-shadow: 0 4px 20px rgba(255, 165, 0, 0.5); /* orange glow */
+  transition: all 0.3s ease-in-out;
+}
+
+/* Smooth hover for Update/Delete buttons */
+.update-btn:hover, .delete-btn:hover {
+  background-color: #ff6600; /* bright orange */
+  color: white;
+  transform: scale(1.05);
+  box-shadow: 0 0 10px rgba(255, 102, 0, 0.7);
+  transition: all 0.3s ease;
+}
+
+/* Profile dropdown glow */
+.profile-dropdown-content a:hover {
+  background-color: #ffe0b3;
+  color: #ff6600;
+}
+
+    @media (max-width: 768px) {
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px;
+  }
+
+  header h1 {
+    font-size: 24px;
+  }
+
+  main {
+    padding: 20px;
+  }
+
+  .recipe-container {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+  }
+
+  .recipe-card img {
+    height: 150px;
+  }
+
+  .modal-content {
+    width: 90%;
+    margin: 50px auto;
+  }
+}
+
+@media (max-width: 480px) {
+  header h1 {
+    font-size: 20px;
+  }
+
+  #logout-button {
+    padding: 6px 12px;
+    font-size: 14px;
+  }
+
+  .recipe-card h3 {
+    font-size: 18px;
+  }
+
+  .description {
+    font-size: 12px;
+  }
+
+  .card-buttons {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .update-btn, .delete-btn {
+    width: 100%;
+    font-size: 14px;
+  }
+}
+
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <h1>👨‍🍳 My Recipe Dashboard</h1>
+    <button id="logout-button">Logout</button>
+  </header>
+
+  <main>
+    <section id="recipe-grid">
+      <h2 id="category-title">My Recipes</h2>
+      <div id="recipe-boxes" class="recipe-container">
+        <!-- User's recipes will be inserted here -->
+      </div>
+    </section>
+  </main>
+
+  <template id="recipe-card-template">
+    <div class="recipe-card">
+      <img src="" alt="Recipe Image" />
+      <h3></h3>
+      <p class="description"></p>
+      <div class="card-buttons">
+        <button class="update-btn">Update</button>
+        <button class="delete-btn">Delete</button>
+      </div>
+    </div>
+  </template>
+
+  <!-- Update Modal -->
+  <div id="update-recipe-modal" class="modal">
+    <div class="modal-content">
+      <span id="close-update-recipe" class="close">&times;</span>
+      <h2>Update Recipe</h2>
+      <form id="update-recipe-form" enctype="multipart/form-data">
+        <input type="hidden" id="update-recipe-id" />
+        
+        <label>Title</label>
+        <input type="text" id="update-recipe-title" required />
+
+        <label>Category</label>
+        <select id="update-recipe-category" required>
+          <option value="Veg">Veg</option>
+          <option value="Non-Veg">Non-Veg</option>
+          <option value="Dessert">Dessert</option>
+        </select>
+
+        <label>Ingredients</label>
+        <textarea id="update-recipe-ingredients" required></textarea>
+
+        <label>Instructions</label>
+        <textarea id="update-recipe-instructions" required></textarea>
+
+        <label>Image</label>
+        <input type="file" id="update-recipe-image-file" accept="image/*" />
+
+        <button type="submit">Update</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="scripts/dashboard.js"></script>
+
+</body>
+</html>

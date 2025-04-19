@@ -11,9 +11,10 @@ const authenticateToken = (req, res, next) => {
     if (err) {
       return res.status(403).json({ error: 'Token is invalid or expired' });
     }
-    req.user = user; // Attach user data to request object
+    req.user = user;
     next();
   });
+  
 };
 
 module.exports = authenticateToken;

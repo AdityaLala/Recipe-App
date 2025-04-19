@@ -282,3 +282,93 @@ addRecipeForm.addEventListener('submit', async (e) => {
     alert(error.message);
   }
 });
+
+// document.addEventListener("DOMContentLoaded", () => {
+//   const token = localStorage.getItem("token");
+//   const profileDropdown = document.getElementById("profile-dropdown");
+
+//   if (token) {
+//     profileDropdown.style.display = "inline-block";
+//   } else {
+//     profileDropdown.style.display = "none";
+//   }
+
+//   const avatarIcon = document.getElementById("avatar-icon");
+//   const dropdownMenu = profileDropdown.querySelector(".dropdown-menu");
+
+//   avatarIcon?.addEventListener("click", () => {
+//     dropdownMenu.style.display =
+//       dropdownMenu.style.display === "block" ? "none" : "block";
+//   });
+
+// });
+
+
+
+function attachProfileAvatarListener() {
+  const profileAvatar = document.getElementById('profile-avatar');
+  const profileMenu = document.getElementById('profile-menu');
+
+  if (profileAvatar && profileMenu) {
+    profileAvatar.addEventListener('click', (e) => {
+      e.stopPropagation();
+      profileMenu.classList.toggle('active');
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!profileMenu.contains(e.target) && !profileAvatar.contains(e.target)) {
+        profileMenu.classList.remove('active');
+      }
+    });
+  }
+}
+
+
+
+window.addEventListener('DOMContentLoaded', () => {
+  const token = localStorage.getItem('token');
+
+  const loginBtn = document.getElementById('login-button');
+  const registerBtn = document.getElementById('register-link');
+  const logoutBtn = document.getElementById('logout-button');
+  const profileDropdown = document.getElementById('profile-avatar');
+
+  if (token) {
+    // User is logged in
+    loginBtn?.classList.add('hidden');
+    registerBtn?.classList.add('hidden');
+    logoutBtn?.classList.remove('hidden');
+    profileDropdown?.classList.remove('hidden');
+    attachProfileAvatarListener();
+    setTimeout(() => {
+      attachProfileAvatarListener();
+    }, 0);
+    toggleAddRecipeButton(true);
+  } else {
+    // User is logged out
+    loginBtn?.classList.remove('hidden');
+    registerBtn?.classList.remove('hidden');
+    logoutBtn?.classList.add('hidden');
+    profileDropdown?.classList.add('hidden');
+    toggleAddRecipeButton(false);
+  }
+});
+
+
+const profileAvatar = document.getElementById('profile-avatar');
+const profileMenu = document.getElementById('profile-menu');
+
+if (profileAvatar && profileMenu) {
+  profileAvatar.addEventListener('click', (e) => {
+    e.stopPropagation(); // Prevents the click from bubbling up to document
+    profileMenu.classList.toggle('active'); // Toggle the menu visibility
+  });
+
+  // Optional: Close the dropdown if user clicks anywhere outside the menu
+  document.addEventListener('click', (e) => {
+    if (!profileMenu.contains(e.target) && !profileAvatar.contains(e.target)) {
+      profileMenu.classList.remove('active'); // Close menu if clicked outside
+    }
+  });
+}
+

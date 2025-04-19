@@ -65,8 +65,11 @@
 </head>
 <body>
   <header class="main-header">
+    
     <div class="logo">🍽️ Flavor Fusion</div>
     <!-- Navbar changes: Show User Info if logged in -->
+    
+
 <nav class="navbar">
   <a href="#">Home</a>
   <a href="#categories">Categories</a>
@@ -78,6 +81,19 @@
   <div class="navbar-search">
     <input type="text" id="search-input" placeholder="Search recipes..." />
     <button id="search-button">🔍</button>
+
+    <div id="profile-avatar" style="cursor: pointer; z-index: 10;pointer-events: auto; ">
+      <img src="img/user.png" id="img" alt="Profile" style="width: 40px; height: 40px; border-radius: 50%;">
+    </div>
+    
+    <div id="profile-menu" class="profile-menu">
+      <a href="dashboard.html" class="profile-link">My Dashboard</a>
+      <div class="divider"></div>
+      <button id="logout-button-navbar" class="logout-button">Logout</button>
+    </div>
+    
+    
+    
   </div>
 
   <!-- Display user name after login -->
@@ -177,5 +193,28 @@
 
   <script src="scripts/main.js"></script>
   <script src="scripts/login.js"></script>
+  <script>
+    const token = localStorage.getItem('token');
+  
+    if (token) {
+      document.getElementById('profile-avatar').style.display = 'block';
+    }
+  
+    const avatar = document.getElementById('img');
+    const menu = document.getElementById('profile-menu');
+  
+    avatar?.addEventListener('click', () => {
+      menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
+    });
+  
+    document.getElementById('logout-button-navbar')?.addEventListener('click', () => {
+      localStorage.removeItem('token');
+      window.location.href = 'index.html';
+    });
+
+   
+
+  </script>
+  
 </body>
 </html>
