@@ -169,4 +169,10 @@ window.addEventListener("click", (e) => {
 });
 
 // Load recipes on page load
+const backButton = document.getElementById('back-to-home');
+
+backButton.addEventListener('click', () => {
+  window.location.href = 'index.html';
+});
+
 fetchMyRecipes();

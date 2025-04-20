@@ -62,14 +62,14 @@ router.get('/search', async (req, res) => {
 });
 
 // GET: Get all recipes
-// router.get('/', async (req, res) => {
-//   try {
-//     const recipes = await Recipe.find().sort({ createdAt: -1 });
-//     res.json(recipes);
-//   } catch (err) {
-//     res.status(500).json({ message: err.message });
-//   }
-// });
+router.get('/', async (req, res) => {
+  try {
+    const recipes = await Recipe.find();  // Fetch all recipes
+    res.json(recipes);
+  } catch (error) {
+    res.status(500).json({ message: 'Failed to fetch recipes' });
+  }
+});
 
 // Get all recipes created by the logged-in user
 router.get("/my-recipes", auth, async (req, res) => {

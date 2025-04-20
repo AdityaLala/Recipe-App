@@ -269,6 +269,32 @@
     font-size: 14px;
   }
 }
+.back-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 20px;
+  padding: 10px 20px;
+  background-color: #ff5722;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  text-decoration: none;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.back-button:hover {
+  background-color: #e64a19;
+  transform: translateX(-3px);
+}
+
+.arrow-icon {
+  font-size: 20px;
+}
+
+
 
   </style>
 </head>
@@ -277,6 +303,10 @@
 
   <header>
     <h1>👨‍🍳 My Recipe Dashboard</h1>
+    <button id="back-to-home" class="back-button">
+      <span class="arrow-icon">←</span> Back to Home
+    </button>
+    
     <button id="logout-button">Logout</button>
   </header>
 

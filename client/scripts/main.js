@@ -40,49 +40,7 @@ categories.forEach((box) => {
   });
 });
 
-// document.getElementById("add-recipe-form").addEventListener("submit", async (e) => {
-//   e.preventDefault();
 
-//   const token = localStorage.getItem("token");
-//   if (!token) {
-//     alert("You must be logged in to add a recipe.");
-//     return;
-//   }
-
-//   const formData = new FormData();
-//   formData.append("title", document.getElementById("recipe-title").value);
-//   formData.append("category", document.getElementById("recipe-category").value);
-//   formData.append("ingredients", document.getElementById("recipe-ingredients").value.split(","));
-//   formData.append("instructions", document.getElementById("recipe-instructions").value);
-
-//   const fileInput = document.getElementById("recipe-image-file");
-//   if (fileInput.files && fileInput.files[0]) {
-//     formData.append("image", fileInput.files[0]);
-//   }
-
-//   try {
-//     const res = await fetch("http://localhost:5000/api/recipes", {
-//       method: "POST",
-//       headers: {
-//         "Authorization": `Bearer ${token}`,
-//       },
-//       body: formData,
-//     });
-
-//     const data = await res.json();
-
-//     if (res.ok) {
-//       alert("Recipe added successfully!");
-//       document.getElementById("add-recipe-modal").style.display = "none";
-//       window.location.reload();
-//     } else {
-//       alert(data.error || "Something went wrong while adding the recipe.");
-//     }
-//   } catch (err) {
-//     console.error("Error submitting recipe:", err);
-//     alert("Failed to submit recipe.");
-//   }
-// });
 
 function renderRecipeCards(data) {
   const recipeBoxes = document.getElementById("recipe-boxes");
@@ -95,78 +53,12 @@ function renderRecipeCards(data) {
       <img src="${recipe.imageUrl}" alt="${recipe.title}" />
       <h3>${recipe.title}</h3>
     `;
+    card.addEventListener('click', () => {
+      window.location.href = `recipe.html?id=${recipe._id}`;
+    });
     recipeBoxes.appendChild(card);
   });
 }
-
-
-
-
-// Click on a recipe card for full details
-recipeBoxes.addEventListener("click", (e) => {
-  if (e.target.closest(".recipe-card")) {
-    const card = e.target.closest(".recipe-card");
-    const title = card.querySelector("h3").textContent;
-
-    fetch(`${API_BASE}/api/recipes/title/${encodeURIComponent(title)}`, {
-      headers: {
-        "Authorization": `Bearer ${localStorage.getItem("token")}`, // Include token
-      },
-    })
-      .then((res) => res.json())
-      .then((recipe) => {
-        document.getElementById("recipe-main").innerHTML = `
-          <h2>${recipe.title}</h2>
-          <img src="${recipe.imageUrl}" alt="${recipe.title}" style="max-width:100%;border-radius:10px;" />
-          <p>${recipe.description}</p>
-        `;
-
-        fetch(`${API_BASE}/api/recipes/category/${recipe.category}`)
-          .then((res) => res.json())
-          .then((allRecipes) => {
-            const recommended = allRecipes
-              .filter((r) => r.title !== recipe.title)
-              .slice(0, 4);
-
-            const recommendedList = document.getElementById("recommended-list");
-            recommendedList.innerHTML = "";
-
-            recommended.forEach((r) => {
-              const card = document.createElement("div");
-              card.classList.add("recipe-card");
-              card.innerHTML = `
-                <img src="${r.imageUrl}" alt="${r.title}" />
-                <span>${r.title}</span>
-              `;
-              recommendedList.appendChild(card);
-            });
-
-            document.getElementById("recipe-details").style.display = "block";
-            document.getElementById("recipe-details").scrollIntoView({ behavior: "smooth" });
-          });
-      });
-  }
-
-
-
-  // AUTO SHOW USER IF ALREADY LOGGED IN
-  const userName = localStorage.getItem("userName");
-  if (userName) {
-    const userDisplay = document.getElementById("user-name-display");
-    if (userDisplay) {
-      userDisplay.textContent = `👋 Welcome, ${userName}`;
-    }
-
-    const loginBtn = document.getElementById("login-button");
-    if (loginBtn) {
-      loginBtn.disabled = true;
-      loginBtn.innerText = "Logged In";
-    }
-  }
-});
-
-
-
 
 // Example for search functionality with token validation
 const searchButton = document.getElementById("search-button");
@@ -245,20 +137,20 @@ closeAddRecipeModal.addEventListener('click', () => {
 addRecipeForm.addEventListener('submit', async (e) => {
   e.preventDefault();
   console.log('Submitting recipe...'); // ✅
-
+  
   const fileInput = document.getElementById('recipe-image-file');
   if (!fileInput || !fileInput.files.length) {
     alert("Please upload an image");
     return;
   }
-
+  
   const formData = new FormData();
   formData.append('title', document.getElementById('recipe-title').value);
   formData.append('category', document.getElementById('recipe-category').value);
   formData.append('ingredients', document.getElementById('recipe-ingredients').value);
   formData.append('instructions', document.getElementById('recipe-instructions').value);
   formData.append('image', fileInput.files[0]);
-
+  
   try {
     const response = await fetch('http://localhost:5000/api/recipes', {
       method: 'POST',
@@ -267,13 +159,13 @@ addRecipeForm.addEventListener('submit', async (e) => {
         'Authorization': `Bearer ${localStorage.getItem('token')}`
       }
     });
-
+    
     const result = await response.json();
-
+    
     if (!response.ok) {
       throw new Error(result.error || 'Failed to submit recipe');
     }
-
+    
     alert('Recipe added successfully!');
     console.log('Recipe added:', result);
     addRecipeModal.style.display = 'none';
@@ -283,25 +175,6 @@ addRecipeForm.addEventListener('submit', async (e) => {
   }
 });
 
-// document.addEventListener("DOMContentLoaded", () => {
-//   const token = localStorage.getItem("token");
-//   const profileDropdown = document.getElementById("profile-dropdown");
-
-//   if (token) {
-//     profileDropdown.style.display = "inline-block";
-//   } else {
-//     profileDropdown.style.display = "none";
-//   }
-
-//   const avatarIcon = document.getElementById("avatar-icon");
-//   const dropdownMenu = profileDropdown.querySelector(".dropdown-menu");
-
-//   avatarIcon?.addEventListener("click", () => {
-//     dropdownMenu.style.display =
-//       dropdownMenu.style.display === "block" ? "none" : "block";
-//   });
-
-// });
 
 
 
@@ -327,12 +200,12 @@ function attachProfileAvatarListener() {
 
 window.addEventListener('DOMContentLoaded', () => {
   const token = localStorage.getItem('token');
-
+  
   const loginBtn = document.getElementById('login-button');
   const registerBtn = document.getElementById('register-link');
   const logoutBtn = document.getElementById('logout-button');
   const profileDropdown = document.getElementById('profile-avatar');
-
+  
   if (token) {
     // User is logged in
     loginBtn?.classList.add('hidden');
@@ -363,7 +236,7 @@ if (profileAvatar && profileMenu) {
     e.stopPropagation(); // Prevents the click from bubbling up to document
     profileMenu.classList.toggle('active'); // Toggle the menu visibility
   });
-
+  
   // Optional: Close the dropdown if user clicks anywhere outside the menu
   document.addEventListener('click', (e) => {
     if (!profileMenu.contains(e.target) && !profileAvatar.contains(e.target)) {
@@ -372,3 +245,64 @@ if (profileAvatar && profileMenu) {
   });
 }
 
+// recipeBoxes.addEventListener("click", (e) => {
+//   if (e.target.closest(".recipe-card")) {
+//     const card = e.target.closest(".recipe-card");
+//     const title = card.querySelector("h3").textContent;
+
+//     fetch(`${API_BASE}/api/recipes/title/${encodeURIComponent(title)}`, {
+//       headers: {
+//         "Authorization": `Bearer ${localStorage.getItem("token")}`, // Include token
+//       },
+//     })
+//       .then((res) => res.json())
+//       .then((recipe) => {
+//         document.getElementById("recipe-main").innerHTML = `
+//           <h2>${recipe.title}</h2>
+//           <img src="${recipe.imageUrl}" alt="${recipe.title}" style="max-width:100%;border-radius:10px;" />
+//           <p>${recipe.description}</p>
+//         `;
+
+//         fetch(`${API_BASE}/api/recipes/category/${recipe.category}`)
+//           .then((res) => res.json())
+//           .then((allRecipes) => {
+//             const recommended = allRecipes
+//               .filter((r) => r.title !== recipe.title)
+//               .slice(0, 4);
+
+//             const recommendedList = document.getElementById("recommended-list");
+//             recommendedList.innerHTML = "";
+
+//             recommended.forEach((r) => {
+//               const card = document.createElement("div");
+//               card.classList.add("recipe-card");
+//               card.innerHTML = `
+//                 <img src="${r.imageUrl}" alt="${r.title}" />
+//                 <span>${r.title}</span>
+//               `;
+//               recommendedList.appendChild(card);
+//             });
+
+//             document.getElementById("recipe-details").style.display = "block";
+//             document.getElementById("recipe-details").scrollIntoView({ behavior: "smooth" });
+//           });
+//       });
+//   }
+
+
+
+//   // AUTO SHOW USER IF ALREADY LOGGED IN
+//   const userName = localStorage.getItem("userName");
+//   if (userName) {
+//     const userDisplay = document.getElementById("user-name-display");
+//     if (userDisplay) {
+//       userDisplay.textContent = `👋 Welcome, ${userName}`;
+//     }
+
+//     const loginBtn = document.getElementById("login-button");
+//     if (loginBtn) {
+//       loginBtn.disabled = true;
+//       loginBtn.innerText = "Logged In";
+//     }
+//   }
+// });
