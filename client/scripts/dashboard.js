@@ -117,7 +117,7 @@ if (imageFile) {
 
 const token = localStorage.getItem("token");
 
-fetch(`http://localhost:5000/api/recipes/${recipeId}`, {
+fetch(`${API_BASE}/api/recipes/${recipeId}`, {
   method: "PATCH",
   headers: {
     Authorization: `Bearer ${token}`,

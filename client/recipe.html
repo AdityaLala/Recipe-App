@@ -279,6 +279,7 @@ body {
   </section>
 
   <script >
+const API_BASE = "http://localhost:5000";
 
     // Handle Back to Home button click
 const backHomeBtn = document.getElementById('back-home-btn');
@@ -293,7 +294,7 @@ const recipeId = urlParams.get('id');
 // Fetch the recipe details using the ID
 async function fetchRecipeDetails() {
   try {
-    const res = await fetch(`http://localhost:5000/api/recipes/${recipeId}`, {
+    const res = await fetch(`${API_BASE}/api/recipes/${recipeId}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${localStorage.getItem('token')}`  // Assuming token is stored in localStorage
@@ -320,7 +321,7 @@ function renderRecipe(recipe) {
   const ingredientsList = recipe.ingredients ? recipe.ingredients.map(ingredient => `<li>${ingredient}</li>`).join('') : '';
 
   // Ensure the image URL is complete
-  const imageUrl = recipe.imageUrl ? `http://localhost:5000${recipe.imageUrl}` : 'default-image.jpg';
+  const imageUrl = recipe.imageUrl ? `${API_BASE}${recipe.imageUrl}` : 'default-image.jpg';
 
   container.innerHTML = `
     <div class="recipe-full-card">
@@ -339,7 +340,7 @@ function renderRecipe(recipe) {
 
 async function fetchRecommendedRecipes(currentRecipeId) {
   try {
-    const res = await fetch('http://localhost:5000/api/recipes/'); // Fetch all recipes
+    const res = await fetch(`${API_BASE}/api/recipes/`); // Fetch all recipes
     const data = await res.json();
 
     // Filter out the current recipe from recommended list
@@ -359,7 +360,7 @@ function renderRecommendedRecipes(recommended) {
     const card = document.createElement('div');
     card.classList.add('recommended-card');
     card.innerHTML = `
-      <img src="http://localhost:5000${recipe.imageUrl}" alt="${recipe.title}">
+      <img src="${API_BASE}${recipe.imageUrl}" alt="${recipe.title}">
       <h4>${recipe.title}</h4>
     `;
     card.addEventListener('click', () => {

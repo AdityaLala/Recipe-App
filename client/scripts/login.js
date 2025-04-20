@@ -7,6 +7,7 @@ const addRecipeBtn = document.getElementById("add-recipe-btn");
 const closeAddRecipe = document.getElementById("close-add-recipe");
 const registerBtn= document.getElementById("register-link");
 
+const API_BASE = "http://localhost:5000";
 
 // In login.js
 function updateUIAfterLogin() {
@@ -64,7 +65,7 @@ loginForm.addEventListener("submit", async (e) => {
   const password = document.getElementById("login-password").value.trim();
 
   try {
-    const res = await fetch("http://localhost:5000/api/users/login", {
+    const res = await fetch(`${API_BASE}/api/users/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),

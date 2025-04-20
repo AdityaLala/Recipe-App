@@ -46,7 +46,7 @@ function renderRecipeCards(data) {
   const recipeBoxes = document.getElementById("recipe-boxes");
   recipeBoxes.innerHTML = '';
   data.forEach((recipe) => {
-    const imageUrl = recipe.imageUrl ? `http://localhost:5000${recipe.imageUrl}` : 'default-image.jpg';
+    const imageUrl = recipe.imageUrl ? `${API_BASE}${recipe.imageUrl}` : 'default-image.jpg';
     const card = document.createElement('div');
     card.classList.add('recipe-card');
     card.innerHTML = `
@@ -152,7 +152,7 @@ addRecipeForm.addEventListener('submit', async (e) => {
   formData.append('image', fileInput.files[0]);
   
   try {
-    const response = await fetch('http://localhost:5000/api/recipes', {
+    const response = await fetch(`${API_BASE}/api/recipes`, {
       method: 'POST',
       body: formData,
       headers: {
