@@ -32,7 +32,11 @@ app.use('/uploads', express.static(uploadsDir));
 
 
 
-app.use(cors());
+//app.use(cors());
+app.use(cors({
+  origin: "https://recipe-app-1-t0wh.onrender.com", // your frontend domain
+  credentials: true,
+}));
 app.use(express.json());
 
 
