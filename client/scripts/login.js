@@ -7,7 +7,7 @@ const loginForm = document.getElementById("login-form");
 const addRecipeBtn = document.getElementById("add-recipe-btn");
 const closeAddRecipe = document.getElementById("close-add-recipe");
 const registerBtn= document.getElementById("register-link");
-const API_BASE= "https://recipe-app-guir.onrender.com";
+// const API_BASE= "https://recipe-app-guir.onrender.com";
 
 // In login.js
 function updateUIAfterLogin() {
