@@ -1,4 +1,5 @@
-const API_BASE = "http://localhost:5000";
+// const API_BASE = "http://localhost:5000";
+const API_BASE = "https://recipe-app-guir.onrender.com";
 const recipeBoxes = document.getElementById("recipe-boxes");
 const categoryTitle = document.getElementById("category-title");
 const userDisplay = document.getElementById("user-name-display");

@@ -9,7 +9,8 @@ const closeAddRecipeModal = document.getElementById('close-add-recipe');
 
 
 // Base API URL
-const API_BASE = "http://localhost:5000";
+// const API_BASE = "http://localhost:5000";
+const API_BASE = "https://recipe-app-guir.onrender.com";
 
 
   

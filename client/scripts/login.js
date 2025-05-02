@@ -1,3 +1,4 @@
+// const API_BASE = "http://localhost:5000";
 const logoutBtn = document.getElementById("logout-button");
 const loginBtn = document.getElementById("login-button");
 const loginModal = document.getElementById("login-modal");
@@ -6,8 +7,7 @@ const loginForm = document.getElementById("login-form");
 const addRecipeBtn = document.getElementById("add-recipe-btn");
 const closeAddRecipe = document.getElementById("close-add-recipe");
 const registerBtn= document.getElementById("register-link");
-
-const API_BASE = "http://localhost:5000";
+const API_BASE= "https://recipe-app-guir.onrender.com";
 
 // In login.js
 function updateUIAfterLogin() {
