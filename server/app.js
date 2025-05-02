@@ -9,7 +9,8 @@ const app = express();
 const fs = require("fs");
 const multer = require("multer");
 // Serve static files from the root directory
-app.use(express.static(path.join(__dirname, 'public')));
+// app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, "../client")));
 
 // If index.html is in the root directory
 app.get("/", (req, res) => {
