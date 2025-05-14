@@ -27,7 +27,7 @@ router.post('/', auth, upload.single('image'), async (req, res) => {
 
     // If an image was uploaded, update imageUrl with the new image path
     if (req.file) {
-      updateData.imageUrl = `${baseURL}/uploads/${req.file.filename}`;
+      updateData.imageUrl = `${baseURL}/server/uploads/${req.file.filename}`;
     }
     
     try {
@@ -174,7 +174,7 @@ router.patch("/:id", auth, upload.single("image"), async (req, res) => {
     if (category) updateData.category = category;
 
     if (req.file) {
-      updateData.imageUrl = `${baseURL}/uploads/${req.file.filename}`;
+      updateData.imageUrl = `${baseURL}/server/uploads/${req.file.filename}`;
     }
 
     console.log("Update Data:", updateData);
